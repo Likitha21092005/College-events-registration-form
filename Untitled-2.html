@@ -1,0 +1,807 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>College Events Registration</title>
+    <style>
+        /* Color palette: vibrant colors with animations */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #222222; /* darker text for contrast */
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* Animated gradient background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(270deg, #185a9d, #43cea2, #43cea2, #185a9d);
+            background-size: 800% 800%;
+            animation: gradientAnimation 15s ease infinite;
+            z-index: -1;
+            filter: blur(60px);
+            opacity: 0.7;
+        }
+        @keyframes gradientAnimation {
+            0% {background-position:0% 50%;}
+            50% {background-position:100% 50%;}
+            100% {background-position:0% 50%;}
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(255, 165, 130, 0.4);
+            animation: fadeInUp 1.5s ease forwards, pulseShadow 3s ease infinite;
+            position: relative;
+            z-index: 1;
+        }
+        @keyframes pulseShadow {
+            0%, 100% {
+                box-shadow: 0 8px 30px rgba(255, 165, 130, 0.4);
+            }
+            50% {
+                box-shadow: 0 12px 40px rgba(255, 165, 130, 0.6);
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes buttonClick {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(0.95);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.3); /* more transparent white */
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* subtle shadow */
+            animation: fadeInUp 1.5s ease forwards;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #4A90E2; /* light blue */
+        }
+
+        .header h1 {
+            color: #2C3E50; /* dark slate blue */
+            margin-bottom: 5px;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            font-family: 'Segoe UI Black', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .header p {
+            color: #4A90E2; /* light blue */
+            margin-top: 0;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .event-category {
+            background-color: #E6F0FA; /* very light blue */
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 6px solid #4A90E2; /* light blue */
+            box-shadow: 2px 2px 8px rgba(74, 144, 226, 0.3);
+        }
+
+        .event-category h2 {
+            margin-top: 0;
+            color: #4A90E2; /* light blue */
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #2C3E50; /* dark slate blue */
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="number"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1.5px solid #B0C4DE; /* light steel blue */
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            background-color: #FFFFFF; /* white */
+            color: #333333; /* dark gray */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="number"]:focus,
+        select:focus,
+        textarea:focus {
+            border-color: #4A90E2; /* light blue */
+            outline: none;
+            box-shadow: 0 0 8px rgba(74, 144, 226, 0.6);
+            background-color: #F0F8FF; /* alice blue */
+            transition: box-shadow 0.4s ease, border-color 0.4s ease;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            margin-top: 5px;
+        }
+
+        .radio-group label,
+        .checkbox-group label {
+            display: inline-block;
+            margin-right: 15px;
+            font-weight: normal;
+            cursor: pointer;
+            color: #2C3E50; /* dark slate blue */
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .required:after {
+            content: " *";
+            color: #4A90E2; /* light blue */
+        }
+
+        button {
+            background-color: #4A90E2; /* light blue */
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            display: block;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.5);
+            font-weight: 700;
+        }
+
+        button:active {
+            animation: buttonClick 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #357ABD; /* darker blue */
+            box-shadow: 0 6px 16px rgba(53, 122, 189, 0.7);
+            transform: scale(1.05);
+        }
+
+        button.secondary {
+            background-color: #CCCCCC; /* light gray */
+            margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(204, 204, 204, 0.7);
+        }
+
+        button.secondary:hover {
+            background-color: #AAAAAA; /* medium gray */
+            box-shadow: 0 6px 16px rgba(170, 170, 170, 0.7);
+        }
+
+        .instructions {
+            font-size: 14px;
+            color: #0077B6; /* sea blue */
+            margin-top: 5px;
+            font-style: italic;
+            font-weight: 600;
+        }
+
+        .event-item {
+            margin-bottom: 15px;
+            padding: 12px;
+            background-color: #FFFFFF; /* white */
+            border-radius: 8px;
+            border: 1px solid #90E0EF; /* sea blue */
+            box-shadow: 1px 1px 6px rgba(144, 224, 239, 0.3);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .event-item:hover {
+            box-shadow: 2px 2px 12px rgba(0, 119, 182, 0.5); /* sea blue */
+        }
+
+        /* Animation for event details fade and slide */
+        .event-details-animate {
+            animation: fadeIn 0.8s ease forwards;
+        }
+        .event-details-hide {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+            100% {
+                opacity: 0;
+            }
+        }
+
+        .error-message {
+            color: #D32F2F;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        input:invalid,
+        textarea:invalid,
+        select:invalid {
+            border-color: #D32F2F;
+        }
+
+        .char-counter {
+            font-size: 12px;
+            color: #0077B6; /* sea blue */
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0077B6;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .row {
+                flex-direction: column;
+                gap: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>College Events Registration</h1>
+            <p>Register for upcoming cultural, technical, and sports events</p>
+        </div>
+
+<form id="eventsRegistrationForm" method="POST" action="register.php">
+            <h2>Participant Information</h2>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="fullName" class="required">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required minlength="3" maxlength="50" />
+                        <div class="error-message" id="fullName-error">Please enter your full name (3-50 characters)</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="studentId">Student ID</label>
+                        <input
+                            type="text"
+                            id="studentId"
+                            name="studentId"
+                            pattern="[A-Za-z0-9]{8,12}"
+                            title="8-12 alphanumeric characters"
+                        />
+                        <div class="error-message" id="studentId-error">Please enter a valid student ID (8-12 alphanumeric characters)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="email" class="required">Email Address</label>
+                        <input type="email" id="email" name="email" required />
+                        <div class="error-message" id="email-error">Please enter a valid email address</div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group">
+                        <label for="phone" class="required">Phone Number</label>
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            required
+                            pattern="[\d\s\-()+]{10,15}"
+                            title="10-15 digits with optional country code"
+                        />
+                        <div class="error-message" id="phone-error">Please enter a valid phone number (10-15 digits)</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="department" class="required">Department</label>
+                <select id="department" name="department" required>
+                    <option value="">Select Department</option>
+                    <option value="computer-science">Computer Science</option>
+                    <option value="aiml">AIML</option>
+                    <option value="aids">AIDS</option>
+                    <option value="ds">DS</option>
+                    <option value="ece">ECE</option>
+                    <option value="eee">EEE</option>
+                    <option value="mechanical">Mechanical</option>
+                    <option value="civil">Civil</option>
+                    <option value="eie">EIE</option>
+                </select>
+                <div class="error-message" id="department-error">Please select your department</div>
+            </div>
+
+            <div class="form-group">
+                <label for="year" class="required">Year of Study</label>
+                <select id="year" name="year" required>
+                    <option value="">Select Year</option>
+                    <option value="1">First Year</option>
+                    <option value="2">Second Year</option>
+                    <option value="3">Third Year</option>
+                    <option value="4">Fourth Year</option>
+                </select>
+                <div class="error-message" id="year-error">Please select your year of study</div>
+            </div>
+
+            <h2>Event Registration</h2>
+            <p class="instructions">Select the events you wish to participate in (you can select multiple events)</p>
+
+            <div class="event-category">
+                <h2>Cultural Events</h2>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="culturalEvents" value="dance-solo" /> Dance Solo</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="culturalEvents" value="dance-group" /> Dance Group</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="culturalEvents" value="music-solo" /> Music Solo</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="culturalEvents" value="battle-of-bands" /> Battle of Bands</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="culturalEvents" value="drama-or-skit" /> Drama or Skit</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="culturalEvents" value="fashion-show" /> Fashion Show</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-category">
+                <h2>Technical Events</h2>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="technicalEvents" value="coding-competition" /> Coding Competition</label>
+                    </div>
+                    <div class="form-group" style="margin-left: 20px; display: none" id="coding-details">
+                        <label>Preferred Language</label>
+                        <select name="coding-language">
+                            <option value="any">Any</option>
+                            <option value="python">Python</option>
+                            <option value="java">Java</option>
+                            <option value="c">C/C++</option>
+                            <option value="javascript">JavaScript</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="technicalEvents" value="hackathon" /> Hackathon</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="technicalEvents" value="quiz" /> Technical Quiz</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="technicalEvents" value="paper-presentation" /> Paper Presentation</label>
+                    </div>
+                    <div class="form-group" style="margin-left: 20px; display: none" id="paper-details">
+                        <label>Paper Title</label>
+                        <input type="text" name="paper-title" />
+                        <label>Abstract (100 words)</label>
+                        <textarea name="paper-abstract" rows="3" maxlength="500"></textarea>
+                        <div class="char-counter"><span id="abstract-counter">0</span>/500 characters</div>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="technicalEvents" value="robotics" /> Robotics Workshop</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-category">
+                <h2>Sports Events</h2>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="sportsEvents" value="football" /> Football</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="sportsEvents" value="basketball" /> Basketball</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="sportsEvents" value="badminton" /> Badminton</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="sportsEvents" value="table-tennis" /> Table Tennis</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="sportsEvents" value="cricket" /> Cricket</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="sportsEvents" value="longjump" /> Longjump</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="sportsEvents" value="highjump" /> Highjump</label>
+                    </div>
+                </div>
+
+                <div class="event-item">
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="sportsEvents" value="running" /> Running</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="requirements">Special Requirements</label>
+                <textarea
+                    id="requirements"
+                    name="requirements"
+                    rows="3"
+                    placeholder="Any special equipment or accommodations needed"
+                    maxlength="300"
+                ></textarea>
+                <div class="char-counter"><span id="requirements-counter">0</span>/300 characters</div>
+                <p class="instructions">Please let us know if you need any special arrangements</p>
+            </div>
+
+            <div class="form-group">
+                <label class="required">Terms and Conditions</label>
+                <div class="checkbox-group">
+                    <label
+                        ><input type="checkbox" name="terms" required />
+                        I agree to abide by all event rules and regulations. I understand that the organizers reserve the right to make changes to the schedule.</label
+                    >
+                </div>
+                <div class="error-message" id="terms-error">You must agree to the terms and conditions</div>
+            </div>
+
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>Submitting your registration...</p>
+            </div>
+
+            <button type="submit" id="submitButton">Submit Registration</button>
+            <button type="button" class="secondary" id="clearButton">Clear Form</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('eventsRegistrationForm');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const submitButton = document.getElementById('submitButton');
+            const clearButton = document.getElementById('clearButton');
+
+            // Character counters
+            const paperAbstract = document.querySelector('textarea[name="paper-abstract"]');
+            const requirements = document.getElementById('requirements');
+            const abstractCounter = document.getElementById('abstract-counter');
+            const requirementsCounter = document.getElementById('requirements-counter');
+
+            if (paperAbstract) {
+                paperAbstract.addEventListener('input', function () {
+                    abstractCounter.textContent = this.value.length;
+                });
+            }
+
+            if (requirements) {
+                requirements.addEventListener('input', function () {
+                    requirementsCounter.textContent = this.value.length;
+                });
+            }
+
+            // Show/hide event details when checkbox is clicked
+            document.querySelectorAll(
+                'input[type="checkbox"][name^="culturalEvents"], input[type="checkbox"][name^="technicalEvents"], input[type="checkbox"][name^="sportsEvents"]'
+            ).forEach((checkbox) => {
+                checkbox.addEventListener('change', function () {
+                    const detailsId = this.value + '-details';
+                    const detailsElement = document.getElementById(detailsId);
+                    if (detailsElement) {
+                        if (this.checked) {
+                            detailsElement.style.display = 'block';
+                            detailsElement.classList.remove('fadeOut');
+                            detailsElement.classList.add('event-details-animate');
+                        } else {
+                            detailsElement.classList.remove('event-details-animate');
+                            detailsElement.classList.add('fadeOut');
+                            setTimeout(() => {
+                                detailsElement.style.display = 'none';
+                                detailsElement.classList.remove('fadeOut');
+                            }, 500);
+                        }
+                    }
+                });
+            });
+
+            // Clear form button
+            clearButton.addEventListener('click', function () {
+                if (confirm('Are you sure you want to clear the form?')) {
+                    form.reset();
+                    document.querySelectorAll('.error-message').forEach((el) => (el.style.display = 'none'));
+                    document.querySelectorAll('.form-group[style*="display: block"]').forEach((el) => (el.style.display = 'none'));
+                    abstractCounter.textContent = '0';
+                    requirementsCounter.textContent = '0';
+                }
+            });
+
+            // Enhanced form validation
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Reset error messages
+                document.querySelectorAll('.error-message').forEach((el) => (el.style.display = 'none'));
+
+                let isValid = true;
+
+                // Validate required fields
+                const requiredFields = [
+                    { id: 'fullName', errorId: 'fullName-error', message: 'Please enter your full name (3-50 characters)' },
+                    { id: 'email', errorId: 'email-error', message: 'Please enter a valid email address' },
+                    { id: 'phone', errorId: 'phone-error', message: 'Please enter a valid phone number (10-15 digits)' },
+                    { id: 'department', errorId: 'department-error', message: 'Please select your department' },
+                    { id: 'year', errorId: 'year-error', message: 'Please select your year of study' },
+                ];
+
+                requiredFields.forEach((field) => {
+                    const element = document.getElementById(field.id);
+                    if (!element.value || (element.hasAttribute('pattern') && !new RegExp(element.getAttribute('pattern')).test(element.value))) {
+                        document.getElementById(field.errorId).style.display = 'block';
+                        isValid = false;
+                    }
+                });
+
+                // Validate student ID if provided
+                const studentId = document.getElementById('studentId');
+                if (studentId.value && !/^[A-Za-z0-9]{8,12}$/.test(studentId.value)) {
+                    document.getElementById('studentId-error').style.display = 'block';
+                    isValid = false;
+                }
+
+                // Check if at least one event is selected
+                const eventCheckboxes = document.querySelectorAll(
+                    'input[type="checkbox"][name^="culturalEvents"], input[type="checkbox"][name^="technicalEvents"], input[type="checkbox"][name^="sportsEvents"]'
+                );
+                let atLeastOneChecked = false;
+
+                eventCheckboxes.forEach((checkbox) => {
+                    if (checkbox.checked) atLeastOneChecked = true;
+                });
+
+                if (!atLeastOneChecked) {
+                    alert('Please select at least one event to participate in');
+                    isValid = false;
+                }
+
+                // Validate terms checkbox
+                if (!document.querySelector('input[name="terms"]:checked')) {
+                    document.getElementById('terms-error').style.display = 'block';
+                    isValid = false;
+                }
+
+                if (!document.querySelector('input[name="terms"]:checked')) {
+                    document.getElementById('terms-error').style.display = 'block';
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    return;
+                }
+
+                // Show loading indicator
+                submitButton.disabled = true;
+                loadingIndicator.style.display = 'block';
+
+            // Simulate form submission (replace with actual AJAX call in production)
+            // Removed simulation to allow actual form submission
+            // form.submit();
+
+            // Collect form data and save to localStorage, then redirect to payment page
+            const formData = new FormData(form);
+            const registrationData = {};
+
+            // Basic fields
+            registrationData.fullName = formData.get('fullName');
+            registrationData.studentId = formData.get('studentId');
+            registrationData.email = formData.get('email');
+            registrationData.phone = formData.get('phone');
+            registrationData.department = formData.get('department');
+            registrationData.year = formData.get('year');
+            registrationData.requirements = formData.get('requirements');
+
+            // Collect selected events
+            const events = [];
+            // Cultural events
+            form.querySelectorAll('input[name="culturalEvents"]:checked').forEach(el => {
+                events.push(el.value);
+            });
+            // Technical events
+            form.querySelectorAll('input[name="technicalEvents"]:checked').forEach(el => {
+                events.push(el.value);
+            });
+            // Sports events
+            form.querySelectorAll('input[name="sportsEvents"]:checked').forEach(el => {
+                events.push(el.value);
+            });
+            registrationData.events = events;
+
+            // Save to localStorage
+            localStorage.setItem('registrationData', JSON.stringify(registrationData));
+
+            // Redirect to payment page
+            window.location.href = 'payment.html';
+        });
+
+            // Real-time validation for fields
+            document.getElementById('fullName').addEventListener('input', function () {
+                if (this.value.length < 3 || this.value.length > 50) {
+                    document.getElementById('fullName-error').style.display = 'block';
+                } else {
+                    document.getElementById('fullName-error').style.display = 'none';
+                }
+            });
+
+            document.getElementById('studentId').addEventListener('input', function () {
+                if (this.value && !/^[A-Za-z0-9]{8,12}$/.test(this.value)) {
+                    document.getElementById('studentId-error').style.display = 'block';
+                } else {
+                    document.getElementById('studentId-error').style.display = 'none';
+                }
+            });
+
+            document.getElementById('email').addEventListener('input', function () {
+                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value)) {
+                    document.getElementById('email-error').style.display = 'block';
+                } else {
+                    document.getElementById('email-error').style.display = 'none';
+                }
+            });
+
+            document.getElementById('phone').addEventListener('input', function () {
+                if (!/^[\d\s\-()+]{10,15}$/.test(this.value)) {
+                    document.getElementById('phone-error').style.display = 'block';
+                } else {
+                    document.getElementById('phone-error').style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

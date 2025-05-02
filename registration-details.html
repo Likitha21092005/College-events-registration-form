@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Registration Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            color: #222222;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #43cea2 0%, #185a9d 100%);
+            overflow-x: hidden;
+            /* Removed animation */
+            background-size: 800% 800%;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(270deg, #730026, #FFFFFF, #FFFDD0, #A9A9A9, #F5F5DC, #722F37, #E0FFFF, #FBE7B2, #FFC0CB, #FFFFFF, #FFFFF0, #E0B0FF, #50C878, #FFFFFF);
+            background-size: 800% 800%;
+            /* Removed animation */
+            z-index: -1;
+            filter: blur(60px);
+            opacity: 0.7;
+        }
+        @keyframes gradientAnimation {
+            0% {background-position:0% 50%; background-color: #730026;}
+            7% {background-position:14% 50%; background-color: #FFFFFF;}
+            14% {background-position:28% 50%; background-color: #FFFDD0;}
+            21% {background-position:42% 50%; background-color: #A9A9A9;}
+            28% {background-position:56% 50%; background-color: #F5F5DC;}
+            35% {background-position:70% 50%; background-color: #722F37;}
+            42% {background-position:84% 50%; background-color: #E0FFFF;}
+            49% {background-position:98% 50%; background-color: #FBE7B2;}
+            56% {background-position:112% 50%; background-color: #FFC0CB;}
+            63% {background-position:126% 50%; background-color: #FFFFFF;}
+            70% {background-position:140% 50%; background-color: #FFFFF0;}
+            77% {background-position:154% 50%; background-color: #E0B0FF;}
+            84% {background-position:168% 50%; background-color: #50C878;}
+            91% {background-position:182% 50%; background-color: #FFFFFF;}
+            100% {background-position:196% 50%; background-color: #730026;}
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(270deg, #185a9d, #43cea2, #43cea2, #185a9d);
+            background-size: 800% 800%;
+            animation: gradientAnimation 15s ease infinite;
+            z-index: -1;
+            filter: blur(60px);
+            opacity: 0.7;
+        }
+        
+        @keyframes gradientAnimation {
+            0% {background-position:0% 50%;}
+            50% {background-position:100% 50%;}
+            100% {background-position:0% 50%;}
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(66, 206, 162, 0.4);
+            animation: fadeInUp 1.5s ease forwards, pulseShadow 3s ease infinite;
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            text-align: center;
+        }
+        @keyframes pulseShadow {
+            0%, 100% {
+                box-shadow: 0 8px 30px rgba(66, 206, 162, 0.4);
+            }
+            50% {
+                box-shadow: 0 12px 40px rgba(66, 206, 162, 0.6);
+            }
+        }
+        h1, h2, h3, h4, h5, h6 {
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2E8B57; /* sea blue */
+            animation: none;
+            text-decoration: underline;
+        }
+        .detail-item {
+            margin-bottom: 15px;
+        }
+        .detail-item label {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 1.3rem;
+            color: #2E8B57; /* sea blue */
+        }
+        .detail-item span {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.2rem;
+        }
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            color: #333;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registration Details</h1>
+        <div class="detail-item">
+            <label>Registration ID:</label>
+            <span id="regId"></span>
+        </div>
+        <div class="detail-item">
+            <label>Full Name:</label>
+            <span id="fullName"></span>
+        </div>
+        <div class="detail-item">
+            <label>Student ID:</label>
+            <span id="studentId"></span>
+        </div>
+        <div class="detail-item">
+            <label>Events Participating In:</label>
+            <ul id="eventsList"></ul>
+        </div>
+        <div class="detail-item">
+            <label>Payment Status:</label>
+            <span id="paymentStatus"></span>
+        </div>
+    </div>
+
+    <script>
+        function loadRegistrationDetails() {
+            const data = JSON.parse(localStorage.getItem('registrationData'));
+            if (!data) {
+                alert('No registration data found.');
+                return;
+            }
+            document.getElementById('regId').textContent = data.registrationId || 'N/A';
+            document.getElementById('fullName').textContent = data.fullName || 'N/A';
+            document.getElementById('studentId').textContent = data.studentId || 'N/A';
+
+            const eventsList = document.getElementById('eventsList');
+            eventsList.innerHTML = '';
+            if (data.events && data.events.length > 0) {
+                data.events.forEach(event => {
+                    const li = document.createElement('li');
+                    li.textContent = event;
+                    eventsList.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.textContent = 'No events selected';
+                eventsList.appendChild(li);
+            }
+
+            document.getElementById('paymentStatus').textContent = data.paymentCompleted ? 'Completed' : 'Pending';
+        }
+
+        window.onload = loadRegistrationDetails;
+    </script>
+</body>
+</html>
